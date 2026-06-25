@@ -1,11 +1,14 @@
-const mysql=require('mysql2')
-var pool=mysql.createConnection({
-    host:'localhost',
-    port:3306,
-    user:'root',
-    password:'tushar1234',
-    database:'HungerBuddy',
-    multipleStatements:true,
-})
+require('dotenv').config();
 
-module.exports = pool
+const mysql = require('mysql2');
+
+var pool = mysql.createConnection({
+    host: process.env.MYSQLHOST,
+    port: process.env.MYSQLPORT,
+    user: process.env.MYSQLUSER,
+    password: process.env.MYSQLPASSWORD,
+    database: process.env.MYSQLDATABASE,
+    multipleStatements: true,
+});
+
+module.exports = pool;
