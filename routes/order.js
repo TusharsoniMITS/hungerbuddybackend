@@ -17,7 +17,6 @@ router.post('/submit_order', function (req, res, next) {
         res.status(500).json({ status: false, message: 'backend error please contact with backend team' })
     }
 });
-
 router.post('/submit_order_detail', function (req, res, next) {
     try {
         pool.query('insert into order_detail(orderid, fooditemid, fooditemname, enrollmentno, emailid, mobileno, qty, rate, offerrate, amount) values ?',[req.body.data?.map((item) => { return [req.body.orderid, item.fooditemid, item.fooditemname, req.body.enrollmentno, req.body.emailid, req.body.mobileno, item.qty, item.fullprice, item.offerprice,item.offerprice>0?item.offerprice*item.qty:item.fullprice*item.qty]})], function (error, result) {

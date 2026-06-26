@@ -2,11 +2,14 @@ var express = require('express');
 const upload = require('./multer');
 var pool = require('./pool')
 var router = express.Router();
+const uploadToCloudinary = require("../utils/uploadToCloudinary");
+
 
 /* GET home page. */
-router.post('/submit_fooditem',upload.single('picture'), function(req, res, next) {
+router.post('/submit_fooditem',upload.single('picture'),async function(req, res, next) {
   try {
-    pool.query('insert into fooditems(categoryid, branchid, fooditemname, fooditemtype, fooditemtaste, ingridients, fullprice, halfprice, offerprice, picture, rating, status, createddate, updatedtime, userid) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',[req.body.categoryid, req.body.branchid, req.body.fooditemname, req.body.fooditemtype, req.body.fooditemtaste, req.body.ingridients, req.body.fullprice, req.body.halfprice, req.body.offerprice, req.file.filename, req.body.rating, req.body.status, req.body.createddate, req.body.updatedtime, req.body.userid],function(error,result){
+        const imageUrl = await uploadToCloudinary(req.file.path);
+    pool.query('insert into fooditems(categoryid, branchid, fooditemname, fooditemtype, fooditemtaste, ingridients, fullprice, halfprice, offerprice, picture, rating, status, createddate, updatedtime, userid) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',[req.body.categoryid, req.body.branchid, req.body.fooditemname, req.body.fooditemtype, req.body.fooditemtaste, req.body.ingridients, req.body.fullprice, req.body.halfprice, req.body.offerprice, imageUrl, req.body.rating, req.body.status, req.body.createddate, req.body.updatedtime, req.body.userid],function(error,result){
         if(error){ 
             res.status(500).json({status:false,message:'database error please contact with backend team'})
             console.log(error)
@@ -87,9 +90,10 @@ router.post('/delete_fooditem', function(req, res, next) {
         console.log(error)
   }
 });
-router.post('/edit_fooditem_picture',upload.single('picture'), function(req, res, next) {
+router.post('/edit_fooditem_picture',upload.single('picture'),async function(req, res, next) {
   try {
-    pool.query('update fooditems set picture=?, createddate=?, updatedtime=?, userid=?  where fooditemid=?',[req.file.filename, req.body.createddate, req.body.updatedtime, req.body.userid, req.body.fooditemid],function(error,result){
+        const imageUrl = await uploadToCloudinary(req.file.path);
+    pool.query('update fooditems set picture=?, createddate=?, updatedtime=?, userid=?  where fooditemid=?',[imageUrl, req.body.createddate, req.body.updatedtime, req.body.userid, req.body.fooditemid],function(error,result){
         if(error){ 
             res.status(500).json({status:false,message:'database error please contact with backend team'})
             console.log(error)

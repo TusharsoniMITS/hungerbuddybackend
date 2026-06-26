@@ -159,7 +159,6 @@ router.post('/fetch_All_state', function (req, res, next) {
     console.log(error)
   }
 });
-
 router.post('/fetch_All_cities', function (req, res, next) {
   try {
     pool.query('select * from cities where stateid=?', [req.body.stateid], function (error, result) {
@@ -175,7 +174,6 @@ router.post('/fetch_All_cities', function (req, res, next) {
     console.log(error)
   }
 });
-
 // router.post('/fetch_orders_by_enrollment', function (req, res, next) {
 //   try {
 //     pool.query(
@@ -245,7 +243,6 @@ router.post('/fetch_orders_by_enrollment', function (req, res, next) {
     })
   }
 })
-
 router.post('/fetch_all_fooditem_by_food_and_Category', function (req, res, next) {
   try {
     pool.query(

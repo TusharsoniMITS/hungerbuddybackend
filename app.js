@@ -1,3 +1,4 @@
+require("dotenv").config();
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -48,6 +49,7 @@ app.use('/employee',employeesRouter)
 app.use('/picture',pictureRouter)
 app.use('/morepicture',morepictureRouter)
 app.use('/order',orderRouter)
+app.use("/images", require("./routes/images"));
 
 
 // catch 404 and forward to error handler

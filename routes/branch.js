@@ -24,7 +24,6 @@ router.post('/chk_branch_login', function (req, res, next) {
         console.log(error)
     }
 });
-
 router.post('/submit_branch', function(req, res, next) {
   try {
     pool.query('insert into branch(branchname, address, latlong, stateid, cityid, emailid, contactnumber, contactperson, createddate, createdtime, userid, password) values(?,?,?,?,?,?,?,?,?,?,?,?)',[req.body.branchname, req.body.address, req.body.latlong, req.body.stateid, req.body.cityid, req.body.emailid, req.body.contactnumber, req.body.contactperson, req.body.createddate, req.body.createdtime, req.body.userid, req.body.password],function(error,result){
@@ -55,7 +54,6 @@ router.get('/fetch_all_branch', function(req, res, next) {
         console.log(error)
   }
 });
-
 router.post('/edit_branch', function(req, res, next) {
   try {
     pool.query('update branch set branchname=?, address=?, latlong=?, stateid=?, cityid=?, emailid=?, contactnumber=?, contactperson=?, createddate=?, createdtime=?, userid=? where branchid=?',[ req.body.branchname, req.body.address, req.body.latlong, req.body.stateid, req.body.cityid, req.body.emailid, req.body.contactnumber, req.body.contactperson, req.body.createddate, req.body.createdtime, req.body.userid, req.body.branchid],function(error,result){
@@ -71,7 +69,6 @@ router.post('/edit_branch', function(req, res, next) {
         console.log(error)
   }
 });
-
 router.post('/delete_branch', function(req, res, next) {
   try {
     pool.query('delete from branch where branchid=?',[req.body.branchid],function(error,result){

@@ -2,10 +2,13 @@ var express = require('express');
 var router = express.Router();
 var upload = require('./multer')
 var pool = require('./pool')
+const uploadToCloudinary = require("../utils/uploadToCloudinary");
 
-router.post('/submit_picture',upload.single('picture'), function(req, res, next) {
+
+router.post('/submit_picture',upload.single('picture'),async function(req, res, next) {
   try {
-    pool.query('insert into morepicture(categoryid, fooditemid, picture, createdate, createtime, userid) values(?,?,?,?,?,?,)',[req.body.categoryid, req.body.fooditemid, req.file.filename, req.body.createdate, req.body.createtime, req.body.userid],function(error,result){
+        const imageUrl = await uploadToCloudinary(req.file.path);
+    pool.query('insert into morepicture(categoryid, fooditemid, picture, createdate, createtime, userid) values(?,?,?,?,?,?,)',[req.body.categoryid, req.body.fooditemid, imageUrl, req.body.createdate, req.body.createtime, req.body.userid],function(error,result){
         if(error){ 
             res.status(500).json({status:false,message:'database error please contact with backend team'})
             console.log(error)

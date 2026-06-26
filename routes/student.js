@@ -2,6 +2,8 @@ var express = require('express');
 var router = express.Router();
 const upload = require('./multer');
 var pool = require('./pool')
+const uploadToCloudinary = require("../utils/uploadToCloudinary");
+
 
 /* GET home page. */
 router.get("/fetch_branch", function (req, res, next) {
@@ -40,9 +42,10 @@ router.get("/fetch_section", function (req, res, next) {
         }
     });
 });
-router.post('/submit_student',upload.single('student_picture'), function(req, res, next) {
+router.post('/submit_student',upload.single('student_picture'),async function(req, res, next) {
   try {
-    pool.query('insert into student(enrollmentno, branchid, batchid, sectionid, studentname, dob, gender, fathername, mothername, emailid, mobileno, fathercontactno, mothercontactno, current_address, current_state, current_city, current_pincode, permanent_address, parmanent_state, parmanent_city, parmanent_pincode, student_picture, createdtime, createddate, userid, addharno) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',[req.body.enrollmentno, req.body.branchid, req.body.batchid, req.body.sectionid, req.body.studentname, req.body.dob, req.body.gender, req.body.fathername, req.body.mothername, req.body.emailid, req.body.mobileno, req.body.fathercontactno, req.body.mothercontactno, req.body.current_address, req.body.current_state, req.body.current_city, req.body.current_pincode, req.body.permanent_address, req.body.parmanent_state, req.body.parmanent_city, req.body.parmanent_pincode, req.file.filename, req.body.createdtime, req.body.createddate, req.body.userid, req.body.addharno],function(error,result){
+        const imageUrl = await uploadToCloudinary(req.file.path);
+    pool.query('insert into student(enrollmentno, branchid, batchid, sectionid, studentname, dob, gender, fathername, mothername, emailid, mobileno, fathercontactno, mothercontactno, current_address, current_state, current_city, current_pincode, permanent_address, parmanent_state, parmanent_city, parmanent_pincode, student_picture, createdtime, createddate, userid, addharno) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',[req.body.enrollmentno, req.body.branchid, req.body.batchid, req.body.sectionid, req.body.studentname, req.body.dob, req.body.gender, req.body.fathername, req.body.mothername, req.body.emailid, req.body.mobileno, req.body.fathercontactno, req.body.mothercontactno, req.body.current_address, req.body.current_state, req.body.current_city, req.body.current_pincode, req.body.permanent_address, req.body.parmanent_state, req.body.parmanent_city, req.body.parmanent_pincode, imageUrl, req.body.createdtime, req.body.createddate, req.body.userid, req.body.addharno],function(error,result){
         if(error){ 
             res.status(500).json({status:false,message:'database error please contact with backend team'})
             console.log(error)
@@ -70,7 +73,6 @@ router.get('/fetch_all_student', function(req, res, next) {
         console.log(error)
   }
 });
-
 router.post('/edit_student', function(req, res, next) {
   try {
     pool.query('update student set enrollmentno=?, branchid=?, batchid=?, sectionid=?, studentname=?, dob=?, gender=?, fathername=?, mothername=?, emailid=?, mobileno=?, fathercontactno=?, mothercontactno=?, current_address=?, current_state=?, current_city=?, current_pincode=?, permanent_address=?, parmanent_state=?, parmanent_city=?, parmanent_pincode=?, createdtime=?, createddate=?, userid=?, addharno=? where enrollmentno=?',[req.body.enrollmentno, req.body.branchid, req.body.batchid, req.body.sectionid, req.body.studentname, req.body.dob, req.body.gender, req.body.fathername, req.body.mothername, req.body.emailid, req.body.mobileno, req.body.fathercontactno, req.body.mothercontactno, req.body.current_address, req.body.current_state, req.body.current_city, req.body.current_pincode, req.body.permanent_address, req.body.parmanent_state, req.body.parmanent_city, req.body.parmanent_pincode, req.body.createdtime, req.body.createddate, req.body.userid, req.body.addharno,req.body.enrollmentno],function(error,result){
@@ -86,7 +88,6 @@ router.post('/edit_student', function(req, res, next) {
         console.log(error)
   }
 });
-
 router.post('/delete_student', function(req, res, next) {
   try {
     pool.query('delete from student where enrollmentno=?',[req.body.enrollmentno],function(error,result){
@@ -102,10 +103,10 @@ router.post('/delete_student', function(req, res, next) {
         console.log(error)
   }
 });
-
-router.post('/edit_picture_student',upload.single('student_picture'), function(req, res, next) {
+router.post('/edit_picture_student',upload.single('student_picture'),async function(req, res, next) {
   try {
-    pool.query('update student set student_picture=?, createddate=?, createdtime=?, userid=?  where enrollmentno=?',[req.file.filename, req.body.createddate, req.body.createdtime, req.body.userid, req.body.enrollmentno],function(error,result){
+        const imageUrl = await uploadToCloudinary(req.file.path);
+    pool.query('update student set student_picture=?, createddate=?, createdtime=?, userid=?  where enrollmentno=?',[imageUrl, req.body.createddate, req.body.createdtime, req.body.userid, req.body.enrollmentno],function(error,result){
         if(error){ 
             res.status(500).json({status:false,message:'database error please contact with backend team'})
             console.log(error)
