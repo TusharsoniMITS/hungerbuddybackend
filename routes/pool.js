@@ -19,6 +19,9 @@ var pool = mysql.createConnection({
     user: process.env.MYSQLUSER,
     password: process.env.MYSQLPASSWORD,
     database: process.env.MYSQLDATABASE,
+    ssl: {
+        minVersion: "TLSv1.2",
+    },
     multipleStatements: true,
 });
 
