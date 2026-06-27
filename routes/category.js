@@ -7,7 +7,6 @@ const uploadToCloudinary = require("../utils/uploadToCloudinary");
 router.post('/submit_category', upload.single('categoryicon'), async function (req, res, next) {
     try {
         const imageUrl = await uploadToCloudinary(req.file.path);
-
         pool.query('insert into FoodCategory(branchid, categoryname, categoryicon, createddate, createdtime, userid) values(?,?,?,?,?,?)', [req.body.branchid, req.body.categoryname, imageUrl, req.body.createddate, req.body.createdtime, req.body.userid], function (error, result) {
             if (error) {
                 res.status(500).json({ status: false, message: 'database error please contact with backend team' })
@@ -39,7 +38,6 @@ router.get('/fetch_all_category', function (req, res, next) {
         console.log(error)
     }
 });
-
 router.post('/edit_category', function (req, res, next) {
     try {
         pool.query('update FoodCategory set categoryname=?, createddate=?, createdtime=?, userid=? where categoryid=?', [req.body.categoryname, req.body.createddate, req.body.createdtime, req.body.userid, req.body.categoryid], function (error, result) {
@@ -55,7 +53,6 @@ router.post('/edit_category', function (req, res, next) {
         console.log(error)
     }
 });
-
 router.post('/delete_category', function (req, res, next) {
     try {
         pool.query('delete from FoodCategory where categoryid=?', [req.body.categoryid], function (error, result) {
@@ -71,7 +68,6 @@ router.post('/delete_category', function (req, res, next) {
         console.log(error)
     }
 });
-
 router.post('/edit_picture_category', upload.single('categoryicon'),async function (req, res, next) {
     try {
         const imageUrl = await uploadToCloudinary(req.file.path);
@@ -88,7 +84,6 @@ router.post('/edit_picture_category', upload.single('categoryicon'),async functi
         console.log(error)
     }
 });
-
 router.get("/fetch_branch", function (req, res, next) {
     pool.query("select * from branch", function (error, result) {
         if (error) {

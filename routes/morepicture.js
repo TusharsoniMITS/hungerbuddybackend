@@ -112,6 +112,36 @@ router.post('/fetch_more_picture', function (req, res, next) {
         console.log(error)
     }
 });
+router.post('/delete_morepicture', function (req, res, next) {
+    try {
+        pool.query('delete from morepictures where pictureid=?', [req.body.pictureid], function (error, result) {
+            if (error) {
+                res.status(500).json({ status: false, message: 'database error please contact with backend team' })
+                console.log(error)
+            } else {
+                res.status(200).json({ status: true, data: result, message: 'Delete data successfully' })
+            }
+        })
+    } catch (error) {
+        res.status(500).json({ status: false, message: 'backend error please contact with backend team' })
+        console.log(error)
+    }
+});
+router.post('/edit_morepicture_data', function (req, res, next) {
+    try {
+        pool.query('update morepictures set categoryid=?, fooditemid=?, createdate=?, createtime=?, userid=? where pictureid=?', [req.body.categoryid, req.body.fooditemid, req.body.createdate, req.body.createtime, req.body.userid,req.body.pictureid], function (error, result) {
+            if (error) {
+                res.status(500).json({ status: false, message: 'database error please contact with backend team' })
+                console.log(error)
+            } else {
+                res.status(200).json({ status: true, data: result, message: 'Updated data successfully' })
+            }
+        })
+    } catch (error) {
+        res.status(500).json({ status: false, message: 'backend error please contact with backend team' })
+        console.log(error)
+    }
+});
 
 
 module.exports = router;
