@@ -19,9 +19,7 @@ var pool = mysql.createConnection({
     user: process.env.MYSQLUSER,
     password: process.env.MYSQLPASSWORD,
     database: process.env.MYSQLDATABASE,
-    ssl: {
-        rejectUnauthorized: false,
-    },
+    ca: process.env.MYSQLSSL,
     multipleStatements: true,
 });
 
