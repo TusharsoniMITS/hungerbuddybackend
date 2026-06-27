@@ -12,6 +12,7 @@
 
 require('dotenv').config();
 const mysql = require('mysql2');
+const fs = require("fs");
 
 var pool = mysql.createConnection({
     host: process.env.MYSQLHOST,
@@ -19,7 +20,11 @@ var pool = mysql.createConnection({
     user: process.env.MYSQLUSER,
     password: process.env.MYSQLPASSWORD,
     database: process.env.MYSQLDATABASE,
-    ca: process.env.MYSQLSSL,
+    ssl: {
+        ca: fs.readFileSync(process.env.MYSQLSSL),
+    },
+    waitForConnections: true,
+    connectionLimit: 10,
     multipleStatements: true,
 });
 
