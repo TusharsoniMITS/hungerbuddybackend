@@ -16,7 +16,7 @@ router.get("/:image", function(req, res) {
     const image = req.params.image;
 
     res.redirect(
-        `https://res.cloudinary.com/djbnrq83q/image/upload/HungerBuddy/${image}`
+        `https://res.cloudinary.com/djbnrq83q/image/upload/f_auto,q_auto,w_500/HungerBuddy/${image}`
     );
 
 });

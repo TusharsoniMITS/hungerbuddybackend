@@ -21,8 +21,9 @@ router.get('/fetch_all_category', function (req, res, next) {
 });
 router.post('/fetch_all_fooditem_by_category', function (req, res, next) {
   try {
-    pool.query('select F.*,(select B.branchname from branch B where B.branchid=F.branchid) as branchname,(select C.categoryname from FoodCategory C where C.categoryid=F.categoryid) as categoryname from fooditems F where F.categoryid in (select categoryid from foodcategory where categoryname=?)', [req.body.categoryname], function (error, result) {
+    pool.query('select F.*,(select B.branchname from branch B where B.branchid=F.branchid) as branchname,(select C.categoryname from FoodCategory C where C.categoryid=F.categoryid) as categoryname from fooditems F where F.categoryid in (select categoryid from FoodCategory where categoryname=?)', [req.body.categoryname], function (error, result) {
       if (error) {
+        console.log(error)
         res.status(500).json({ status: false, message: 'database error please contact with backend team' })
       } else {
         res.status(200).json({ data: result, status: true, data: result, message: 'success' })
